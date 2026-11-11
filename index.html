@@ -44,7 +44,6 @@
     .art{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;display:block;user-select:none;-webkit-user-drag:none;z-index:1}
     #opening{cursor:pointer;--bg-img:url('assets/opening.webp')}
     #mainScreen{--bg-img:url('assets/principal.webp')}
-    #giftScreen{--bg-img:url('assets/presentes.webp')}
     #dressScreen{--bg-img:url('assets/dresscode.webp')}
     #manualScreen{--bg-img:url('assets/manual.webp')}
     #countdownScreen{--bg-img:url('assets/contagem.webp')}
@@ -718,7 +717,7 @@
 
       function editorScreenFor(key){
         if(key === "counter" || key === "backCountdown") return "countdownScreen";
-        if(key === "pix" || key === "backGift") return "giftScreen";
+        
         if(key === "backDress") return "dressScreen";
         if(key === "backManual") return "manualScreen";
         return "mainScreen";
@@ -792,7 +791,7 @@
         if(!HOTSPOTS[key] || !featureEnabled[key]) return;
         selected = key; $("areaSelect").value = key;
         if(document.body.classList.contains("editor-on")) show(editorScreenFor(key));
-        Object.values(buttons).forEach(b=>b.classList.remove("selected"));
+        Object.values(buttons).forEach(b=>{ if(b) b.classList.remove("selected"); });
         if(buttons[key]) buttons[key].classList.add("selected");
         const isBack = key.startsWith("back");
         $("backTextRow").style.display = isBack ? "flex" : "none";
@@ -820,8 +819,6 @@
           if(!document.body.classList.contains("editor-on")) return;
           e.preventDefault(); e.stopPropagation(); selectArea(key);
           const stageEl = key === "counter" ? $("countdownStage") :
-            key === "pix" ? $("giftStage") :
-            key === "backGift" ? $("giftStage") :
             key === "backDress" ? $("dressStage") :
             key === "backManual" ? $("manualStage") :
             key === "backCountdown" ? $("countdownStage") : $("mainStage");

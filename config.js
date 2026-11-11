@@ -48,7 +48,7 @@ window.CONFIG = {
     video: true,
     whatsapp: true,
     localizacao: true,
-    presentes: false,
+    presentes: true,
     dresscode: true,
     manual: true,
     contagem: false

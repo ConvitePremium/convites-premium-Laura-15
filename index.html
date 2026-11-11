@@ -135,14 +135,6 @@
       </div>
     </section>
 
-    <section id="giftScreen" class="screen" aria-label="Sugestões de presentes">
-      <div class="stage" id="giftStage">
-        <img class="art" src="assets/presentes.webp" alt="Sugestões de presentes" loading="lazy" width="941" height="1672">
-        <button class="pix-copy" id="pixCopyBtn" data-key="pix" data-label="PIX (copiar chave)" aria-label="Copiar chave PIX"></button>
-        <button class="back" id="backBtn" data-key="backGift" data-label="Voltar — Presentes">Voltar</button>
-      </div>
-    </section>
-
     <section id="dressScreen" class="screen" aria-label="Dress code">
       <div class="stage" id="dressStage">
         <img class="art" src="assets/dresscode.webp" alt="Dress code" loading="lazy" width="941" height="1672">
@@ -293,7 +285,7 @@
       const hasWhatsapp = !!C.telas.whatsapp;
       const hasMap = !!C.telas.localizacao;
       const hasGift = !!C.telas.presentes;
-      const hasPix = hasGift && !!C.pix.ativo;
+      const hasPix = false; // Presentes é um link externo
       const hasDress = !!C.telas.dresscode;
       const hasManual = !!C.telas.manual;
       const hasCountdown = !!C.telas.contagem;
@@ -307,7 +299,7 @@
         manual: hasManual,
         countdown: hasCountdown,
         counter: hasCountdown,
-        backGift: hasGift,
+        backGift: false,
         backDress: hasDress,
         backManual: hasManual,
         backCountdown: hasCountdown
@@ -320,12 +312,12 @@
         confirm: document.getElementById("confirmBtn"),
         map: document.getElementById("mapBtn"),
         gift: document.getElementById("giftBtn"),
-        pix: document.getElementById("pixCopyBtn"),
+        pix: null,
         dress: document.getElementById("dressBtn"),
         manual: document.getElementById("manualBtn"),
         countdown: document.getElementById("countdownBtn"),
         counter: document.getElementById("countdownBox"),
-        backGift: document.getElementById("backBtn"),
+        backGift: null,
         backDress: document.getElementById("dressBackBtn"),
         backManual: document.getElementById("manualBackBtn"),
         backCountdown: document.getElementById("countdownBackBtn")
@@ -336,7 +328,7 @@
       });
       if(hasPix) HOTSPOTS.pix = JSON.parse(JSON.stringify(C.pix.posicao));
       if(hasCountdown) HOTSPOTS.counter = JSON.parse(JSON.stringify(C.contagem.posicao));
-      if(hasGift) HOTSPOTS.backGift = JSON.parse(JSON.stringify((C.botoesVoltar.presentes||{}).posicao || {left:3.7,top:1.5,width:20,height:6}));
+      if(false) HOTSPOTS.backGift = JSON.parse(JSON.stringify((C.botoesVoltar.presentes||{}).posicao || {left:3.7,top:1.5,width:20,height:6}));
       if(hasDress) HOTSPOTS.backDress = JSON.parse(JSON.stringify((C.botoesVoltar.dresscode||{}).posicao || {left:3.7,top:1.5,width:20,height:6}));
       if(hasManual) HOTSPOTS.backManual = JSON.parse(JSON.stringify((C.botoesVoltar.manual||{}).posicao || {left:3.7,top:1.5,width:20,height:6}));
       if(hasCountdown) HOTSPOTS.backCountdown = JSON.parse(JSON.stringify((C.botoesVoltar.contagem||{}).posicao || {left:3.7,top:1.5,width:20,height:6}));
@@ -360,7 +352,7 @@
       Object.entries(buttons).forEach(([key,el])=>{
         if(el && !featureEnabled[key]) el.remove();
       });
-      if(!hasGift) $("giftScreen")?.remove();
+      
       if(!hasDress) $("dressScreen")?.remove();
       if(!hasManual) $("manualScreen")?.remove();
       if(!hasCountdown) $("countdownScreen")?.remove();
@@ -419,7 +411,7 @@
         const list = ["opening"];
         if(hasVideo) list.push("videoScreen");
         list.push("mainScreen");
-        if(hasGift) list.push("giftScreen");
+        // Presentes: link externo, sem tela interna.
         if(hasDress) list.push("dressScreen");
         if(hasManual) list.push("manualScreen");
         if(hasCountdown) list.push("countdownScreen");
@@ -865,7 +857,7 @@
         });
         if(hasPix) HOTSPOTS.pix = JSON.parse(JSON.stringify(C.pix.posicao));
       if(hasCountdown) HOTSPOTS.counter = JSON.parse(JSON.stringify(C.contagem.posicao));
-      if(hasGift) HOTSPOTS.backGift = JSON.parse(JSON.stringify((C.botoesVoltar.presentes||{}).posicao || {left:3.7,top:1.5,width:20,height:6}));
+      if(false) HOTSPOTS.backGift = JSON.parse(JSON.stringify((C.botoesVoltar.presentes||{}).posicao || {left:3.7,top:1.5,width:20,height:6}));
       if(hasDress) HOTSPOTS.backDress = JSON.parse(JSON.stringify((C.botoesVoltar.dresscode||{}).posicao || {left:3.7,top:1.5,width:20,height:6}));
       if(hasManual) HOTSPOTS.backManual = JSON.parse(JSON.stringify((C.botoesVoltar.manual||{}).posicao || {left:3.7,top:1.5,width:20,height:6}));
       if(hasCountdown) HOTSPOTS.backCountdown = JSON.parse(JSON.stringify((C.botoesVoltar.contagem||{}).posicao || {left:3.7,top:1.5,width:20,height:6}));
@@ -881,7 +873,7 @@
         }).join(",\n");
         const c = HOTSPOTS.counter;
         const backCode = "\n\nbotoesVoltar: {\n" +
-          (hasGift ? "    presentes: { mostrarTexto:"+backTextConfig.backGift+", posicao: "+JSON.stringify(HOTSPOTS.backGift)+" },\n" : "") +
+          "" +
           (hasDress ? "    dresscode: { mostrarTexto:"+backTextConfig.backDress+", posicao: "+JSON.stringify(HOTSPOTS.backDress)+" },\n" : "") +
           (hasManual ? "    manual: { mostrarTexto:"+backTextConfig.backManual+", posicao: "+JSON.stringify(HOTSPOTS.backManual)+" },\n" : "") +
           (hasCountdown ? "    contagem: { mostrarTexto:"+backTextConfig.backCountdown+", posicao: "+JSON.stringify(HOTSPOTS.backCountdown)+" }\n" : "") +
